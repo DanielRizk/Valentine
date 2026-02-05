@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💘 Valentine?</title>
+  <style>
+    :root {
+      --card-bg: rgba(255, 255, 255, 0.70);
+      --shadow: 0 20px 60px rgba(25, 25, 50, 0.12);
+      --text: #2b2b3a;
+      --muted: rgba(43, 43, 58, 0.70);
+      --yes: #ff4d8d;
+      --yes2:#ff7db3;
+      --no: #6b7cff;
+      --no2:#a0a9ff;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; color: var(--text); }
+
+    body {
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background:
+        radial-gradient(1200px 800px at 20% 10%, rgba(255, 210, 235, 0.8), transparent 60%),
+        radial-gradient(1000px 700px at 80% 30%, rgba(210, 230, 255, 0.85), transparent 55%),
+        radial-gradient(900px 600px at 40% 90%, rgba(255, 250, 210, 0.75), transparent 60%),
+        linear-gradient(135deg, #ffe6f2, #e8f0ff, #fff6df);
+    }
+
+    /* floating hearts */
+    .hearts {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.35;
+      filter: blur(0.2px);
+    }
+    .heart {
+      position: absolute;
+      width: 14px; height: 14px;
+      transform: rotate(45deg);
+      background: rgba(255, 77, 141, 0.55);
+      border-radius: 4px;
+      animation: floatUp linear infinite;
+    }
+    .heart::before, .heart::after {
+      content: "";
+      position: absolute;
+      width: 14px; height: 14px;
+      background: inherit;
+      border-radius: 50%;
+    }
+    .heart::before { left: -7px; top: 0; }
+    .heart::after  { top: -7px; left: 0; }
+
+    @keyframes floatUp {
+      from { transform: translateY(20px) rotate(45deg); opacity: 0; }
+      10% { opacity: 0.9; }
+      to   { transform: translateY(-110vh) rotate(45deg); opacity: 0; }
+    }
+
+    .card {
+      position: relative;
+      width: min(560px, calc(100vw - 32px));
+      padding: 28px 22px;
+      border-radius: 24px;
+      background: var(--card-bg);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.55);
+      backdrop-filter: blur(10px);
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(24px, 4.5vw, 38px);
+      letter-spacing: -0.02em;
+    }
+
+    p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .btnRow {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 10px;
+      height: 62px; /* reserve space so the No button can move inside */
+    }
+
+    button {
+      border: 0;
+      padding: 14px 18px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      min-width: 120px;
+    }
+
+    #yesBtn {
+      background: linear-gradient(135deg, var(--yes), var(--yes2));
+      color: white;
+      box-shadow: 0 12px 30px rgba(255, 77, 141, 0.25);
+    }
+    #yesBtn:hover { transform: translateY(-2px) scale(1.02); filter: brightness(1.02); }
+    #yesBtn:active { transform: translateY(0) scale(0.99); }
+
+    /* No button will be absolutely positioned within .btnRow */
+    #noBtn {
+      position: absolute;
+      left: 55%;
+      top: 0%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--no), var(--no2));
+      color: white;
+      box-shadow: 0 12px 30px rgba(107, 124, 255, 0.20);
+    }
+    #noBtn:hover { transform: translateX(-50%) translateY(-2px); }
+    #noBtn:active { transform: translateX(-50%) scale(0.99); }
+
+    .result {
+      display: none;
+      margin-top: 14px;
+    }
+
+    .gifWrap {
+      margin: 14px auto 10px;
+      width: min(360px, 85vw);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(25, 25, 50, 0.15);
+      border: 1px solid rgba(255,255,255,0.55);
+    }
+    .gifWrap img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .smallNote {
+      margin-top: 6px;
+      font-size: 12px;
+      color: rgba(43, 43, 58, 0.55);
+    }
+
+    .sparkle {
+      display: inline-block;
+      animation: pop 1.2s ease-in-out infinite;
+    }
+    @keyframes pop {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="hearts" id="hearts"></div>
+
+  <div class="card" id="card">
+    <div id="ask">
+      <h1>Will you be my Valentine? <span class="sparkle">💘</span></h1>
+      <p>Be honest… but also choose wisely 😇</p>
+
+      <div class="btnRow" id="btnRow">
+        <button id="yesBtn" type="button">Yes 💖</button>
+        <button id="noBtn" type="button" aria-label="No">No 🙃</button>
+      </div>
+
+      <div class="smallNote">Tip: the “No” button is… shy.</div>
+    </div>
+
+    <div class="result" id="result">
+      <h1>I knew you would accept! 💞</h1>
+      <p>Now you’re officially my Valentine 😌</p>
+
+      <div class="gifWrap">
+        <img id="gif" alt="Valentine gif" />
+      </div>
+
+      <p style="margin: 0; font-weight: 650;">Happy Valentine’s Day 🥰</p>
+    </div>
+  </div>
+
+  <script>
+    // If you upload your own GIF to the repo, put it here:
+    // Create: /assets/valentine.gif
+    const GIF_SRC = "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbzliNTRsbm9hZ2JqcnZmOGZoYmJpamQ1eTVnd202MmRnaWtoMHp6aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/C8ih1zB9e9KJLySClx/giphy.gif";
+
+    // Fallback online GIF (optional). If your local gif is missing, this will show.
+    const GIF_FALLBACK = "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbzliNTRsbm9hZ2JqcnZmOGZoYmJpamQ1eTVnd202MmRnaWtoMHp6aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/C8ih1zB9e9KJLySClx/giphy.gif";
+
+    // --- hearts background ---
+    const hearts = document.getElementById("hearts");
+    const heartCount = 18;
+    for (let i = 0; i < heartCount; i++) {
+      const h = document.createElement("div");
+      h.className = "heart";
+      const left = Math.random() * 100;
+      const dur = 6 + Math.random() * 8;
+      const delay = Math.random() * 6;
+      const size = 10 + Math.random() * 10;
+      h.style.left = left + "vw";
+      h.style.bottom = (-20 - Math.random() * 40) + "px";
+      h.style.animationDuration = dur + "s";
+      h.style.animationDelay = delay + "s";
+      h.style.width = size + "px";
+      h.style.height = size + "px";
+      hearts.appendChild(h);
+    }
+
+    // --- button logic ---
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const btnRow = document.getElementById("btnRow");
+    const ask = document.getElementById("ask");
+    const result = document.getElementById("result");
+    const gif = document.getElementById("gif");
+
+    // Place the "No" button somewhere inside btnRow bounds
+    function moveNoButton() {
+      const rowRect = btnRow.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+
+      // Safe padding so it doesn't clip
+      const pad = 6;
+
+      const maxX = rowRect.width - btnRect.width - pad * 2;
+      const maxY = rowRect.height - btnRect.height - pad * 2;
+
+      // If screen is too small, keep it near the center
+      const x = maxX > 0 ? (Math.random() * maxX + pad) : (rowRect.width / 2 - btnRect.width / 2);
+      const y = maxY > 0 ? (Math.random() * maxY + pad) : 0;
+
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+      noBtn.style.transform = "translateX(0)"; // override center transform
+    }
+
+    // Initial random placement (after layout)
+    window.addEventListener("load", () => {
+      // Try local GIF first, fallback if not found
+      gif.src = GIF_SRC;
+      gif.onerror = () => { gif.src = GIF_FALLBACK; };
+
+      // give it a tick so button sizes are computed
+      setTimeout(moveNoButton, 60);
+    });
+
+    // Mouse: runs away when you try to hover
+    noBtn.addEventListener("mouseenter", moveNoButton);
+
+    // Mobile: runs away when you try to tap
+    noBtn.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      moveNoButton();
+    }, { passive: false });
+
+    // Optional: also evade when mouse gets close (more evil 😈)
+    btnRow.addEventListener("mousemove", (e) => {
+      const rect = noBtn.getBoundingClientRect();
+      const dx = e.clientX - (rect.left + rect.width / 2);
+      const dy = e.clientY - (rect.top + rect.height / 2);
+      const dist = Math.hypot(dx, dy);
+      if (dist < 90) moveNoButton();
+    });
+
+    yesBtn.addEventListener("click", () => {
+      ask.style.display = "none";
+      result.style.display = "block";
+    });
+
+    // Reposition on resize (so it stays within bounds)
+    window.addEventListener("resize", () => {
+      // Re-center transform for small layout changes then move
+      noBtn.style.transform = "translateX(0)";
+      moveNoButton();
+    });
+  </script>
+</body>
+</html>
