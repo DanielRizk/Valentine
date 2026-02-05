@@ -1,304 +1,331 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>💘 Valentine?</title>
+  <title>Valentine 💗</title>
   <style>
-    :root{
-      --card-bg: rgba(255, 255, 255, 0.72);
-      --shadow: 0 20px 60px rgba(25, 25, 50, 0.12);
-      --text: #2b2b3a;
-      --muted: rgba(43, 43, 58, 0.70);
-      --yes: #ff4d8d;
-      --yes2:#ff7db3;
-      --no: #6b7cff;
-      --no2:#a0a9ff;
+    :root {
+      --card-bg: rgba(255, 255, 255, 0.55);
+      --card-border: rgba(255, 255, 255, 0.65);
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.10);
     }
 
-    *{ box-sizing: border-box; }
-    html, body{ height:100%; margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; color:var(--text); }
+    * { box-sizing: border-box; }
 
-    body{
-      display:grid;
-      place-items:center;
-      overflow:hidden;
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow: hidden;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color: #4a1e2b;
       background:
-        radial-gradient(1200px 800px at 20% 10%, rgba(255, 210, 235, 0.8), transparent 60%),
-        radial-gradient(1000px 700px at 80% 30%, rgba(210, 230, 255, 0.85), transparent 55%),
-        radial-gradient(900px 600px at 40% 90%, rgba(255, 250, 210, 0.75), transparent 60%),
-        linear-gradient(135deg, #ffe6f2, #e8f0ff, #fff6df);
+        radial-gradient(1200px 700px at 20% 20%, rgba(255, 255, 255, 0.35), transparent 55%),
+        radial-gradient(900px 600px at 80% 30%, rgba(255, 255, 255, 0.25), transparent 55%),
+        linear-gradient(135deg, #ffd1dc 0%, #ffc2e3 30%, #f6d6ff 60%, #ffd7c7 100%);
     }
 
-    .hearts{ position: fixed; inset:0; pointer-events:none; opacity:0.35; }
-    .heart{
-      position:absolute;
-      width:14px; height:14px;
-      transform: rotate(45deg);
-      background: rgba(255,77,141,0.55);
-      border-radius:4px;
-      animation: floatUp linear infinite;
+    .hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.18;
+      background-image:
+        radial-gradient(circle at 10px 10px, rgba(255, 255, 255, 0.6) 0 2px, transparent 3px),
+        radial-gradient(circle at 30px 25px, rgba(255, 255, 255, 0.55) 0 1.5px, transparent 3px),
+        radial-gradient(circle at 60px 40px, rgba(255, 255, 255, 0.45) 0 2px, transparent 3px);
+      background-size: 90px 70px;
+      animation: drift 18s linear infinite;
     }
-    .heart::before, .heart::after{
-      content:"";
-      position:absolute;
-      width:14px; height:14px;
-      background: inherit;
-      border-radius:50%;
-    }
-    .heart::before{ left:-7px; top:0; }
-    .heart::after{ top:-7px; left:0; }
-    @keyframes floatUp{
-      from { transform: translateY(20px) rotate(45deg); opacity: 0; }
-      10% { opacity: 0.9; }
-      to   { transform: translateY(-110vh) rotate(45deg); opacity: 0; }
+    @keyframes drift {
+      from { transform: translate3d(0, 0, 0); }
+      to   { transform: translate3d(-120px, 90px, 0); }
     }
 
-    .card{
-      position: relative;
-      width: min(560px, calc(100vw - 32px));
-      padding: 28px 22px;
-      border-radius: 24px;
+    .center {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      z-index: 1;
+    }
+
+    .card {
+      width: min(720px, 92vw);
+      padding: 34px 26px 28px;
+      border-radius: 28px;
       background: var(--card-bg);
+      border: 1px solid var(--card-border);
       box-shadow: var(--shadow);
-      border: 1px solid rgba(255,255,255,0.55);
       backdrop-filter: blur(10px);
-      text-align:center;
+      text-align: center;
+      position: relative;
       z-index: 2;
     }
 
-    h1{ margin:0 0 10px; font-size: clamp(24px, 4.5vw, 38px); letter-spacing:-0.02em; }
-    p{ margin:0 0 18px; color: var(--muted); font-size:15px; }
-
-    .btnRow{
-      display:flex;
-      justify-content:center;
-      gap: 14px;
-      margin-top: 10px;
-      align-items: center;
-      flex-wrap: nowrap;
+    h1 {
+      margin: 0 0 18px;
+      font-size: clamp(22px, 3.6vw, 36px);
+      line-height: 1.15;
     }
 
-    button{
-      border:0;
-      padding: 14px 18px;
-      border-radius: 999px;
-      font-weight: 800;
+    .sub {
+      margin: 0 0 22px;
+      font-size: clamp(14px, 2.2vw, 16px);
+      opacity: 0.85;
+    }
+
+    .btns {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 10px;
+      min-height: 64px;
+      align-items: center;
+    }
+
+    button {
+      border: 0;
+      border-radius: 16px;
+      padding: 14px 20px;
       font-size: 16px;
-      cursor:pointer;
-      transition: transform 0.12s ease, filter 0.12s ease;
-      user-select:none;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.10);
+      transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
+      user-select: none;
       -webkit-tap-highlight-color: transparent;
-      min-width: 130px;
       white-space: nowrap;
     }
 
-    #yesBtn{
-      background: linear-gradient(135deg, var(--yes), var(--yes2));
-      color:white;
-      box-shadow: 0 12px 30px rgba(255,77,141,0.25);
-      position: relative;
-      z-index: 3;
-    }
-    #yesBtn:hover{ transform: translateY(-2px) scale(1.02); }
-    #yesBtn:active{ transform: translateY(0) scale(0.99); }
-
-    /* IMPORTANT: start as normal (so it appears next to Yes), then JS switches it to fixed */
-    #noBtn{
-      background: linear-gradient(135deg, var(--no), var(--no2));
-      color:white;
-      box-shadow: 0 12px 30px rgba(107,124,255,0.20);
-      position: static; /* will become fixed after we lock it */
+    #yesBtn {
+      background: linear-gradient(135deg, #ff6fa5, #ff8cc6);
+      color: white;
     }
 
-    .runner{
-      position: fixed !important;
-      z-index: 9999;
+    /* The "in-card" NO button (only visible before it starts escaping) */
+    #noBtnStatic {
+      background: linear-gradient(135deg, #ffd0e4, #ffe6f2);
+      color: #7a243e;
+      border: 1px solid rgba(122, 36, 62, 0.15);
     }
 
-    .result{ display:none; margin-top: 14px; }
-    .gifWrap{
-      margin: 14px auto 10px;
-      width: min(380px, 88vw);
-      border-radius: 18px;
-      overflow:hidden;
-      box-shadow: 0 16px 40px rgba(25,25,50,0.15);
-      border: 1px solid rgba(255,255,255,0.55);
+    /* Fullscreen playground layer for the escaping NO button */
+    #playground {
+      position: fixed;
+      inset: 0;
+      z-index: 3; /* above the card so it's never hidden */
+      pointer-events: none; /* button itself will enable pointer events */
     }
-    .gifWrap img{ display:block; width:100%; height:auto; }
 
-    .smallNote{ margin-top: 8px; font-size: 12px; color: rgba(43,43,58,0.55); }
+    #noBtnFloating {
+      position: fixed;
+      left: 0;
+      top: 0;
+      pointer-events: auto;
+      display: none; /* becomes visible on first touch/hover */
+      background: linear-gradient(135deg, #ffd0e4, #ffe6f2);
+      color: #7a243e;
+      border: 1px solid rgba(122, 36, 62, 0.15);
+    }
 
-    .sparkle{ display:inline-block; animation: pop 1.2s ease-in-out infinite; }
-    @keyframes pop{ 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-2px);} }
+    .hint {
+      margin-top: 16px;
+      font-size: 13px;
+      opacity: 0.7;
+    }
+
+    .yay h2 {
+      margin: 0 0 14px;
+      font-size: clamp(22px, 3.6vw, 34px);
+    }
+
+    .gif {
+      width: min(420px, 88vw);
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: 0 18px 50px rgba(0,0,0,0.12);
+      margin: 0 auto;
+    }
+    .gif img { display: block; width: 100%; height: auto; }
   </style>
 </head>
 <body>
-  <div class="hearts" id="hearts"></div>
+  <div class="hearts"></div>
 
-  <div class="card">
-    <div id="ask">
-      <h1>Batabeto… will you be my Valentine? <span class="sparkle">💘</span></h1>
-      <p>Choose carefully 😇</p>
+  <!-- Playground overlay for the escaping button -->
+  <div id="playground">
+    <button id="noBtnFloating" aria-label="No (try to click me)">No</button>
+  </div>
 
-      <div class="btnRow" id="btnRow">
-        <button id="yesBtn" type="button">Yes 💖</button>
-        <button id="noBtn" type="button" aria-label="No">No 🙃</button>
+  <div class="center" id="root">
+    <div class="card">
+      <h1>Batabeto, Will you be my valentine ?</h1>
+      <p class="sub">Choose wisely 😇💘</p>
+
+      <div class="btns">
+        <button id="yesBtn">Yes</button>
+        <button id="noBtnStatic">No</button>
       </div>
 
-      <div class="smallNote">Hint: the “No” button is… very shy.</div>
-    </div>
-
-    <div class="result" id="result">
-      <h1>I knew you would accept, Batabeto! 💞</h1>
-      <p>Now you’re officially my Valentine 😌</p>
-
-      <div class="gifWrap">
-        <img id="gif" alt="Valentine gif" />
-      </div>
-
-      <p style="margin:0; font-weight:800;">Happy Valentine’s Day 🥰</p>
+      <div class="hint">(you can't resist me)</div>
     </div>
   </div>
 
   <script>
-    const GIF_SRC = "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbzliNTRsbm9hZ2JqcnZmOGZoYmJpamQ1eTVnd202MmRnaWtoMHp6aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/C8ih1zB9e9KJLySClx/giphy.gif";
-
-    // hearts
-    const hearts = document.getElementById("hearts");
-    for (let i = 0; i < 18; i++) {
-      const h = document.createElement("div");
-      h.className = "heart";
-      const left = Math.random() * 100;
-      const dur = 6 + Math.random() * 8;
-      const delay = Math.random() * 6;
-      const size = 10 + Math.random() * 10;
-      h.style.left = left + "vw";
-      h.style.bottom = (-20 - Math.random() * 40) + "px";
-      h.style.animationDuration = dur + "s";
-      h.style.animationDelay = delay + "s";
-      h.style.width = size + "px";
-      h.style.height = size + "px";
-      hearts.appendChild(h);
-    }
-
     const yesBtn = document.getElementById("yesBtn");
-    const noBtn  = document.getElementById("noBtn");
-    const ask    = document.getElementById("ask");
-    const result = document.getElementById("result");
-    const gif    = document.getElementById("gif");
+    const noStatic = document.getElementById("noBtnStatic");
+    const noFloat = document.getElementById("noBtnFloating");
+    const root = document.getElementById("root");
 
-    gif.src = GIF_SRC;
+    let activated = false;
 
-    const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
-
-    let locked = false;
-
-    function lockNoButtonToCurrentSpot() {
-      // Measure while it's still in the flex row (next to Yes)
-      const r = noBtn.getBoundingClientRect();
-
-      // Now make it fixed at the same screen coordinates
-      noBtn.classList.add("runner");
-      noBtn.style.left = r.left + "px";
-      noBtn.style.top  = r.top  + "px";
-      noBtn.style.margin = "0";
-      locked = true;
+    function clamp(n, min, max) {
+      return Math.max(min, Math.min(max, n));
     }
 
-    function moveNoAnywhere() {
-      if (!locked) return;
-
+    // 70% play-area centered on screen
+    function getBounds() {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
 
-      // Current button size (works after it becomes fixed)
-      const nb = noBtn.getBoundingClientRect();
-      const yb = yesBtn.getBoundingClientRect();
+      const bw = vw * 0.70;
+      const bh = vh * 0.70;
 
-      const pad = 12;
-      const avoid = 90; // keep away from the YES button a bit
+      const left = (vw - bw) / 2;
+      const top  = (vh - bh) / 2;
 
-      const maxX = vw - nb.width - pad;
-      const maxY = vh - nb.height - pad;
-
-      function tooCloseToYes(x, y) {
-        // distance from candidate center to Yes center
-        const cx = x + nb.width / 2;
-        const cy = y + nb.height / 2;
-        const ycx = yb.left + yb.width / 2;
-        const ycy = yb.top + yb.height / 2;
-        return Math.hypot(cx - ycx, cy - ycy) < avoid;
-      }
-
-      // Try multiple random spots; always clamp so it never leaves the screen.
-      for (let i = 0; i < 30; i++) {
-        let x = Math.random() * (maxX - pad) + pad;
-        let y = Math.random() * (maxY - pad) + pad;
-
-        x = clamp(x, pad, maxX);
-        y = clamp(y, pad, maxY);
-
-        if (!tooCloseToYes(x, y)) {
-          noBtn.style.left = x + "px";
-          noBtn.style.top  = y + "px";
-          return;
-        }
-      }
-
-      // Fallback: even if close, still move but remain on-screen
-      const x = clamp(Math.random() * (maxX - pad) + pad, pad, maxX);
-      const y = clamp(Math.random() * (maxY - pad) + pad, pad, maxY);
-      noBtn.style.left = x + "px";
-      noBtn.style.top  = y + "px";
+      return { left, top, right: left + bw, bottom: top + bh };
     }
 
-    // Ensure layout is stable before locking
-    window.addEventListener("load", () => {
-      // Two RAFs = after layout + paint, reliable positioning
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          lockNoButtonToCurrentSpot();
-        });
-      });
+    function placeFloatingAt(x, y) {
+      const b = getBounds();
+      const r = noFloat.getBoundingClientRect();
+
+      const nx = clamp(x, b.left, b.right - r.width);
+      const ny = clamp(y, b.top,  b.bottom - r.height);
+
+      noFloat.style.left = nx + "px";
+      noFloat.style.top  = ny + "px";
+    }
+
+    function activateFloating() {
+      if (activated) return;
+      activated = true;
+
+      // Show floating button and hide static one (so layout stays stable)
+      const rect = noStatic.getBoundingClientRect();
+
+      noFloat.style.display = "inline-block";
+      // ensure it has same size as the static one (avoid 0 size on first frame)
+      noFloat.style.width = rect.width + "px";
+      noFloat.style.height = rect.height + "px";
+
+      // Put it exactly where the static one was
+      placeFloatingAt(rect.left, rect.top);
+
+      // Hide the in-card button (but keep its space so YES doesn't move)
+      noStatic.style.visibility = "hidden";
+    }
+
+    function fleeFromPointer(clientX, clientY) {
+      activateFloating();
+
+      const b = getBounds();
+      const r = noFloat.getBoundingClientRect();
+
+      const cx = r.left + r.width / 2;
+      const cy = r.top  + r.height / 2;
+
+      let dx = cx - clientX;
+      let dy = cy - clientY;
+
+      if (Math.hypot(dx, dy) < 6) {
+        dx = (Math.random() - 0.5);
+        dy = (Math.random() - 0.5);
+      }
+
+      const len = Math.hypot(dx, dy) || 1;
+      dx /= len; dy /= len;
+
+      const jump = 150;
+      const jitterX = (Math.random() - 0.5) * 70;
+      const jitterY = (Math.random() - 0.5) * 70;
+
+      const targetX = r.left + dx * jump + jitterX;
+      const targetY = r.top  + dy * jump + jitterY;
+
+      const nx = clamp(targetX, b.left, b.right - r.width);
+      const ny = clamp(targetY, b.top,  b.bottom - r.height);
+
+      noFloat.style.left = nx + "px";
+      noFloat.style.top  = ny + "px";
+    }
+
+    // Desktop: only run away when you actually touch (hover onto) the NO button
+    noStatic.addEventListener("mouseenter", (e) => {
+      fleeFromPointer(e.clientX, e.clientY);
     });
 
-    // Run away on interaction
-    noBtn.addEventListener("mouseenter", moveNoAnywhere);
-    noBtn.addEventListener("mousemove", moveNoAnywhere);
-    noBtn.addEventListener("mousedown", (e) => { e.preventDefault(); moveNoAnywhere(); });
-
-    noBtn.addEventListener("touchstart", (e) => {
+    // Mobile: touchstart
+    noStatic.addEventListener("touchstart", (e) => {
+      const t = e.touches[0];
+      fleeFromPointer(t.clientX, t.clientY);
       e.preventDefault();
-      moveNoAnywhere();
     }, { passive: false });
 
-    // Optional: run away if mouse gets close
-    window.addEventListener("mousemove", (e) => {
-      if (!locked) return;
-      const r = noBtn.getBoundingClientRect();
-      const cx = r.left + r.width / 2;
-      const cy = r.top + r.height / 2;
-      const dist = Math.hypot(e.clientX - cx, e.clientY - cy);
-      if (dist < 120) moveNoAnywhere();
+    // Floating button keeps fleeing too
+    noFloat.addEventListener("mouseenter", (e) => {
+      fleeFromPointer(e.clientX, e.clientY);
+    });
+    noFloat.addEventListener("mousemove", (e) => {
+      // if mouse is over it, keep it spicy
+      fleeFromPointer(e.clientX, e.clientY);
+    });
+    noFloat.addEventListener("touchstart", (e) => {
+      const t = e.touches[0];
+      fleeFromPointer(t.clientX, t.clientY);
+      e.preventDefault();
+    }, { passive: false });
+
+    // Just in case someone clicks it
+    noFloat.addEventListener("click", (e) => {
+      fleeFromPointer(e.clientX, e.clientY);
+      e.preventDefault();
     });
 
+    // YES action
     yesBtn.addEventListener("click", () => {
-      ask.style.display = "none";
-      result.style.display = "block";
-    });
 
+	  // Hide BOTH no buttons safely
+	  const noStatic = document.getElementById("noBtnStatic");
+	  const noFloat  = document.getElementById("noBtnFloating");
+
+	  if (noStatic) noStatic.style.display = "none";
+	  if (noFloat)  noFloat.style.display  = "none";
+
+	  // Reset flag if you had one
+	  activated = false;
+
+      // Now show the success content
+	  root.innerHTML = `
+        <div class="card yay">
+          <h2>Yay i knew you would say yes</h2>
+          <div class="gif">
+			<img alt="Yay!" src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbzliNTRsbm9hZ2JqcnZmOGZoYmJpamQ1eTVnd202MmRnaWtoMHp6aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/C8ih1zB9e9KJLySClx/giphy.gif" />
+          </div>
+        </div>
+      `;
+	});
+
+
+    // On resize, keep floating button inside bounds
     window.addEventListener("resize", () => {
-      // Re-lock to current spot (or you can move it somewhere safe)
-      locked = false;
-      noBtn.classList.remove("runner");
-      noBtn.style.left = "";
-      noBtn.style.top = "";
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          lockNoButtonToCurrentSpot();
-        });
-      });
+      if (!activated) return;
+      const r = noFloat.getBoundingClientRect();
+      placeFloatingAt(r.left, r.top);
     });
   </script>
 </body>
