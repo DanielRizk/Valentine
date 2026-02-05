@@ -16,13 +16,13 @@
       --no2:#a0a9ff;
     }
 
-    * { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; color: var(--text); }
+    *{ box-sizing: border-box; }
+    html, body{ height:100%; margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; color:var(--text); }
 
     body{
-      display: grid;
-      place-items: center;
-      overflow: hidden;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
       background:
         radial-gradient(1200px 800px at 20% 10%, rgba(255, 210, 235, 0.8), transparent 60%),
         radial-gradient(1000px 700px at 80% 30%, rgba(210, 230, 255, 0.85), transparent 55%),
@@ -30,22 +30,21 @@
         linear-gradient(135deg, #ffe6f2, #e8f0ff, #fff6df);
     }
 
-    /* floating hearts */
-    .hearts{ position: fixed; inset: 0; pointer-events: none; opacity: 0.35; }
+    .hearts{ position: fixed; inset:0; pointer-events:none; opacity:0.35; }
     .heart{
-      position: absolute;
-      width: 14px; height: 14px;
+      position:absolute;
+      width:14px; height:14px;
       transform: rotate(45deg);
-      background: rgba(255, 77, 141, 0.55);
-      border-radius: 4px;
+      background: rgba(255,77,141,0.55);
+      border-radius:4px;
       animation: floatUp linear infinite;
     }
     .heart::before, .heart::after{
       content:"";
       position:absolute;
-      width: 14px; height: 14px;
+      width:14px; height:14px;
       background: inherit;
-      border-radius: 50%;
+      border-radius:50%;
     }
     .heart::before{ left:-7px; top:0; }
     .heart::after{ top:-7px; left:0; }
@@ -64,50 +63,57 @@
       box-shadow: var(--shadow);
       border: 1px solid rgba(255,255,255,0.55);
       backdrop-filter: blur(10px);
-      text-align: center;
-      z-index: 2; /* above hearts */
+      text-align:center;
+      z-index: 2;
     }
 
-    h1{ margin: 0 0 10px; font-size: clamp(24px, 4.5vw, 38px); letter-spacing: -0.02em; }
-    p{ margin: 0 0 18px; color: var(--muted); font-size: 15px; }
+    h1{ margin:0 0 10px; font-size: clamp(24px, 4.5vw, 38px); letter-spacing:-0.02em; }
+    p{ margin:0 0 18px; color: var(--muted); font-size:15px; }
 
     .btnRow{
-      display: flex;
-      justify-content: center;
+      display:flex;
+      justify-content:center;
       gap: 14px;
       margin-top: 10px;
+      align-items: center;
+      flex-wrap: nowrap;
     }
 
     button{
-      border: 0;
+      border:0;
       padding: 14px 18px;
       border-radius: 999px;
       font-weight: 800;
       font-size: 16px;
-      cursor: pointer;
-      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
-      user-select: none;
+      cursor:pointer;
+      transition: transform 0.12s ease, filter 0.12s ease;
+      user-select:none;
       -webkit-tap-highlight-color: transparent;
       min-width: 130px;
+      white-space: nowrap;
     }
 
     #yesBtn{
       background: linear-gradient(135deg, var(--yes), var(--yes2));
-      color: white;
-      box-shadow: 0 12px 30px rgba(255, 77, 141, 0.25);
+      color:white;
+      box-shadow: 0 12px 30px rgba(255,77,141,0.25);
       position: relative;
       z-index: 3;
     }
     #yesBtn:hover{ transform: translateY(-2px) scale(1.02); }
     #yesBtn:active{ transform: translateY(0) scale(0.99); }
 
-    /* IMPORTANT: No button becomes a "runner" across the whole page */
+    /* IMPORTANT: start as normal (so it appears next to Yes), then JS switches it to fixed */
     #noBtn{
       background: linear-gradient(135deg, var(--no), var(--no2));
-      color: white;
-      box-shadow: 0 12px 30px rgba(107, 124, 255, 0.20);
-      position: fixed; /* can move anywhere in the viewport */
-      z-index: 4;      /* above everything so it looks like it's escaping */
+      color:white;
+      box-shadow: 0 12px 30px rgba(107,124,255,0.20);
+      position: static; /* will become fixed after we lock it */
+    }
+
+    .runner{
+      position: fixed !important;
+      z-index: 9999;
     }
 
     .result{ display:none; margin-top: 14px; }
@@ -115,8 +121,8 @@
       margin: 14px auto 10px;
       width: min(380px, 88vw);
       border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 16px 40px rgba(25, 25, 50, 0.15);
+      overflow:hidden;
+      box-shadow: 0 16px 40px rgba(25,25,50,0.15);
       border: 1px solid rgba(255,255,255,0.55);
     }
     .gifWrap img{ display:block; width:100%; height:auto; }
@@ -137,7 +143,6 @@
 
       <div class="btnRow" id="btnRow">
         <button id="yesBtn" type="button">Yes 💖</button>
-        <!-- starts in the row normally; JS will convert its position to fixed -->
         <button id="noBtn" type="button" aria-label="No">No 🙃</button>
       </div>
 
@@ -157,10 +162,9 @@
   </div>
 
   <script>
-    // Put your online GIF direct link here (must end with .gif ideally)
     const GIF_SRC = "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbzliNTRsbm9hZ2JqcnZmOGZoYmJpamQ1eTVnd202MmRnaWtoMHp6aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/C8ih1zB9e9KJLySClx/giphy.gif";
 
-    // --- hearts background ---
+    // hearts
     const hearts = document.getElementById("hearts");
     for (let i = 0; i < 18; i++) {
       const h = document.createElement("div");
@@ -184,80 +188,97 @@
     const result = document.getElementById("result");
     const gif    = document.getElementById("gif");
 
-    function rect(el){ return el.getBoundingClientRect(); }
-    function overlaps(r1, r2, pad=0){
-      return !(
-        r1.right  < r2.left - pad ||
-        r1.left   > r2.right + pad ||
-        r1.bottom < r2.top - pad ||
-        r1.top    > r2.bottom + pad
-      );
-    }
+    gif.src = GIF_SRC;
 
-    // Convert "No" from normal flow (beside Yes) to fixed at the same spot,
-    // so it *starts* next to Yes but can later move anywhere.
-    function lockNoToViewportPosition() {
-      const r = rect(noBtn);
+    const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
+
+    let locked = false;
+
+    function lockNoButtonToCurrentSpot() {
+      // Measure while it's still in the flex row (next to Yes)
+      const r = noBtn.getBoundingClientRect();
+
+      // Now make it fixed at the same screen coordinates
+      noBtn.classList.add("runner");
       noBtn.style.left = r.left + "px";
-      noBtn.style.top  = r.top + "px";
+      noBtn.style.top  = r.top  + "px";
       noBtn.style.margin = "0";
+      locked = true;
     }
 
     function moveNoAnywhere() {
+      if (!locked) return;
+
       const vw = window.innerWidth;
       const vh = window.innerHeight;
 
-      const nb = rect(noBtn);
-      const yb = rect(yesBtn);
+      // Current button size (works after it becomes fixed)
+      const nb = noBtn.getBoundingClientRect();
+      const yb = yesBtn.getBoundingClientRect();
 
-      const pad = 12;            // keep inside screen
-      const avoidPad = 80;       // keep away from YES button a bit
+      const pad = 12;
+      const avoid = 90; // keep away from the YES button a bit
 
-      const maxX = Math.max(pad, vw - nb.width  - pad);
-      const maxY = Math.max(pad, vh - nb.height - pad);
+      const maxX = vw - nb.width - pad;
+      const maxY = vh - nb.height - pad;
 
-      // Try a few random positions that don't overlap the Yes button
-      for (let i = 0; i < 25; i++) {
-        const x = Math.random() * (maxX - pad) + pad;
-        const y = Math.random() * (maxY - pad) + pad;
+      function tooCloseToYes(x, y) {
+        // distance from candidate center to Yes center
+        const cx = x + nb.width / 2;
+        const cy = y + nb.height / 2;
+        const ycx = yb.left + yb.width / 2;
+        const ycy = yb.top + yb.height / 2;
+        return Math.hypot(cx - ycx, cy - ycy) < avoid;
+      }
 
-        const candidate = { left: x, top: y, right: x + nb.width, bottom: y + nb.height };
-        if (!overlaps(candidate, yb, avoidPad)) {
+      // Try multiple random spots; always clamp so it never leaves the screen.
+      for (let i = 0; i < 30; i++) {
+        let x = Math.random() * (maxX - pad) + pad;
+        let y = Math.random() * (maxY - pad) + pad;
+
+        x = clamp(x, pad, maxX);
+        y = clamp(y, pad, maxY);
+
+        if (!tooCloseToYes(x, y)) {
           noBtn.style.left = x + "px";
           noBtn.style.top  = y + "px";
           return;
         }
       }
 
-      // If we couldn't find a good spot, still move it (better than stuck)
-      noBtn.style.left = (Math.random() * (maxX - pad) + pad) + "px";
-      noBtn.style.top  = (Math.random() * (maxY - pad) + pad) + "px";
+      // Fallback: even if close, still move but remain on-screen
+      const x = clamp(Math.random() * (maxX - pad) + pad, pad, maxX);
+      const y = clamp(Math.random() * (maxY - pad) + pad, pad, maxY);
+      noBtn.style.left = x + "px";
+      noBtn.style.top  = y + "px";
     }
 
+    // Ensure layout is stable before locking
     window.addEventListener("load", () => {
-      gif.src = GIF_SRC;
-
-      // After layout: lock No button to its current position (next to Yes)
-      setTimeout(() => {
-        lockNoToViewportPosition();
-      }, 50);
+      // Two RAFs = after layout + paint, reliable positioning
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          lockNoButtonToCurrentSpot();
+        });
+      });
     });
 
-    // Escape triggers
+    // Run away on interaction
     noBtn.addEventListener("mouseenter", moveNoAnywhere);
-    noBtn.addEventListener("mousedown", moveNoAnywhere);
+    noBtn.addEventListener("mousemove", moveNoAnywhere);
+    noBtn.addEventListener("mousedown", (e) => { e.preventDefault(); moveNoAnywhere(); });
 
-    // Mobile: escape on touch
     noBtn.addEventListener("touchstart", (e) => {
       e.preventDefault();
       moveNoAnywhere();
     }, { passive: false });
 
-    // Optional: also escape if mouse gets close
+    // Optional: run away if mouse gets close
     window.addEventListener("mousemove", (e) => {
-      const r = rect(noBtn);
+      if (!locked) return;
+      const r = noBtn.getBoundingClientRect();
       const cx = r.left + r.width / 2;
-      const cy = r.top  + r.height / 2;
+      const cy = r.top + r.height / 2;
       const dist = Math.hypot(e.clientX - cx, e.clientY - cy);
       if (dist < 120) moveNoAnywhere();
     });
@@ -267,10 +288,17 @@
       result.style.display = "block";
     });
 
-    // Keep it sane on resize
     window.addEventListener("resize", () => {
-      // If the card moved, we re-lock then it can run again
-      lockNoToViewportPosition();
+      // Re-lock to current spot (or you can move it somewhere safe)
+      locked = false;
+      noBtn.classList.remove("runner");
+      noBtn.style.left = "";
+      noBtn.style.top = "";
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          lockNoButtonToCurrentSpot();
+        });
+      });
     });
   </script>
 </body>
